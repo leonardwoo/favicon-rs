@@ -1,0 +1,9 @@
+= Favicon
+
+:lsi: https://img.shields.io/github/license/leonardwoo/favicon?style=flat-square
+// License Shield Image
+image:{lsi}["GitHub"]
+
+== Introduction
+
+A CLI tool for convert favicon
