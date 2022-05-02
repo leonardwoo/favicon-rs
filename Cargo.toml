@@ -1,0 +1,15 @@
+[package]
+name = "favicon"
+version = "0.1.0"
+edition = "2021"
+authors = ["Leonard Woo <leo_916@yahoo.com>"]
+license = "BSD 3-Clause License"
+description = "A CLI tool for convert favicon"
+readme = "README.adoc"
+keywords = ["cli", "favicon"]
+categories = ["command-line-utilities"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+image = "*"

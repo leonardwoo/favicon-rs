@@ -7,3 +7,9 @@ image:{lsi}["GitHub"]
 == Introduction
 
 A CLI tool for convert favicon
+
+== Usage
+
+```shell
+favicon -i <image.png> [output_path]
+```
