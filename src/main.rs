@@ -27,12 +27,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+
 ///
 /// Author: Leonard Woo
 ///
 use std::env;
 use std::path::Path;
 use std::fs;
+use std::collections::LinkedList;
 
 extern crate image;
 use image::imageops::FilterType;
@@ -41,6 +43,12 @@ fn help() {
   println!("usage:
 favicon -i <image.png> [output_path]
 ");
+}
+
+struct ImgOpt {
+  width: u32,
+  height: u32,
+  pathname: String,
 }
 
 fn generator(src: &String, target: String) {
@@ -55,20 +63,38 @@ fn generator(src: &String, target: String) {
     fs::create_dir_all(&target).unwrap();
   }
 
-  let icon = image::imageops::resize(&img, 48, 48, FilterType::Gaussian);
-  icon.save(target.clone() + "favicon.ico").unwrap();
+  let mut arr: LinkedList<ImgOpt> = LinkedList::new();
 
-  let icon32 = image::imageops::resize(&img, 32, 32, FilterType::Gaussian);
-  icon32.save(target.clone() + "favicon-32x32.png").unwrap();
+  arr.push_back(ImgOpt {
+    width: 48,
+    height: 48,
+    pathname: "favicon.ico".to_string(),
+  });
+  arr.push_back(ImgOpt {
+    width: 32,
+    height: 32,
+    pathname: "favicon-32x32.png".to_string(),
+  });
+  arr.push_back(ImgOpt {
+    width: 192,
+    height: 192,
+    pathname: "android-chrome-192x192.png".to_string(),
+  });
+  arr.push_back(ImgOpt {
+    width: 512,
+    height: 512,
+    pathname: "android-chrome-512x512.png".to_string(),
+  });
+  arr.push_back(ImgOpt {
+    width: 180,
+    height: 180,
+    pathname: "apple-touch-icon.png".to_string(),
+  });
 
-  let chrome192 = image::imageops::resize(&img, 192, 192, FilterType::Gaussian);
-  chrome192.save(target.clone() + "android-chrome-192x192.png").unwrap();
-
-  let chrome512 = image::imageops::resize(&img, 512, 512, FilterType::Gaussian);
-  chrome512.save(target.clone() + "android-chrome-512x512.png").unwrap();
-
-  let appletouch = image::imageops::resize(&img, 180, 180, FilterType::Gaussian);
-  appletouch.save(target.clone() + "apple-touch-icon.png").unwrap();
+  for opt in arr.iter() {
+    let icon = image::imageops::resize(&img, opt.width, opt.height, FilterType::Gaussian);
+    icon.save(target.clone() + &opt.pathname).unwrap();
+  }
 
 }
 
