@@ -1,7 +1,7 @@
 = Favicon
 
 == 0.2.0 2022
-. Change image generator to multi-thread
+. Change image generator to multiple threads
 
 == 0.1.0 2022-05-02
 . Generator favicon images

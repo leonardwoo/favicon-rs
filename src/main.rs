@@ -27,17 +27,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-///
-/// Author: Leonard Woo
-///
 use std::env;
 use std::path::Path;
 use std::fs;
 use std::collections::LinkedList;
+use std::thread;
 
 extern crate image;
-use image::imageops::FilterType;
+use image::DynamicImage;
+use image::imageops::{FilterType, resize};
 
 fn help() {
   println!("usage:
@@ -51,13 +49,16 @@ struct ImgOpt {
   pathname: String,
 }
 
+async fn executor(img: &DynamicImage, width: u32, height: u32, pathname: String) {
+  let icon = resize(img, width, height, FilterType::Gaussian);
+  icon.save(pathname).unwrap();
+}
+
 fn generator(src: &String, target: String) {
   if src.trim().is_empty() {
     eprintln!("Not found image");
     help();
   }
-
-  let img = image::open(src).unwrap();
 
   if !Path::new(&target).exists() {
     fs::create_dir_all(&target).unwrap();
@@ -92,8 +93,11 @@ fn generator(src: &String, target: String) {
   });
 
   for opt in arr.iter() {
-    let icon = image::imageops::resize(&img, opt.width, opt.height, FilterType::Gaussian);
-    icon.save(target.clone() + &opt.pathname).unwrap();
+    let pathname = target.clone() + &opt.pathname;
+    thread::spawn(move || {
+      let img = image::open(src).unwrap();
+      executor(&img, opt.width, opt.height, pathname);
+    });
   }
 
 }

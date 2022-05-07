@@ -8,6 +8,7 @@ description = "A CLI tool for convert favicon"
 readme = "README.adoc"
 keywords = ["cli", "favicon"]
 categories = ["command-line-utilities"]
+homepage = "https://github.com/leonardwoo/favicon"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
