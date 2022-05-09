@@ -27,15 +27,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-///
-/// Author: Leonard Woo
-///
 use std::env;
 use std::path::Path;
 use std::fs;
+use std::collections::LinkedList;
+
+use futures::executor::block_on;
 
 extern crate image;
-use image::imageops::FilterType;
+use image::DynamicImage;
+use image::imageops::{FilterType, resize};
 
 fn help() {
   println!("usage:
@@ -43,33 +44,72 @@ favicon -i <image.png> [output_path]
 ");
 }
 
-fn generator(src: &String, target: String) {
+struct ImgOpt {
+  width: u32,
+  height: u32,
+  pathname: String,
+}
+
+async fn executor(img: &DynamicImage, width: u32, height: u32, pathname: String) {
+  let icon = resize(img, width, height, FilterType::Gaussian);
+  icon.save(pathname).unwrap();
+}
+
+async fn generator_caller(src: &String, mut target: String) {
   if src.trim().is_empty() {
     eprintln!("Not found image");
     help();
   }
 
-  let img = image::open(src).unwrap();
-
-  if !Path::new(&target).exists() {
-    fs::create_dir_all(&target).unwrap();
+  let path = Path::new(&target);
+  if !path.exists() {
+    fs::create_dir_all(path).unwrap();
   }
 
-  let icon = image::imageops::resize(&img, 48, 48, FilterType::Gaussian);
-  icon.save(target.clone() + "favicon.ico").unwrap();
+  if !target.ends_with("\\") {
+    target = target + "\\";
+  } else if !target.ends_with("/") {
+    target = target + "/";
+  }
 
-  let icon32 = image::imageops::resize(&img, 32, 32, FilterType::Gaussian);
-  icon32.save(target.clone() + "favicon-32x32.png").unwrap();
+  let mut arr: LinkedList<ImgOpt> = LinkedList::new();
 
-  let chrome192 = image::imageops::resize(&img, 192, 192, FilterType::Gaussian);
-  chrome192.save(target.clone() + "android-chrome-192x192.png").unwrap();
+  arr.push_back(ImgOpt {
+    width: 48,
+    height: 48,
+    pathname: "favicon.ico".to_string(),
+  });
+  arr.push_back(ImgOpt {
+    width: 32,
+    height: 32,
+    pathname: "favicon-32x32.png".to_string(),
+  });
+  arr.push_back(ImgOpt {
+    width: 192,
+    height: 192,
+    pathname: "android-chrome-192x192.png".to_string(),
+  });
+  arr.push_back(ImgOpt {
+    width: 512,
+    height: 512,
+    pathname: "android-chrome-512x512.png".to_string(),
+  });
+  arr.push_back(ImgOpt {
+    width: 180,
+    height: 180,
+    pathname: "apple-touch-icon.png".to_string(),
+  });
 
-  let chrome512 = image::imageops::resize(&img, 512, 512, FilterType::Gaussian);
-  chrome512.save(target.clone() + "android-chrome-512x512.png").unwrap();
+  let img = image::open(src).unwrap();
+  for opt in arr.iter() {
+    let pathname = target.clone() + &opt.pathname;
+    executor(&img.clone(), opt.width, opt.height, pathname).await;
+  }
 
-  let appletouch = image::imageops::resize(&img, 180, 180, FilterType::Gaussian);
-  appletouch.save(target.clone() + "apple-touch-icon.png").unwrap();
+}
 
+fn generator(src: &String, target: String) {
+  block_on(generator_caller(src, target))
 }
 
 fn main() {
@@ -77,6 +117,7 @@ fn main() {
 
   match args.len() {
     1 => {
+      help();
     },
     2 => {
       let cmd = &args[1];
@@ -112,7 +153,6 @@ fn main() {
 
     },
     _ => {
-      // show a help message
       help();
     }
   }
