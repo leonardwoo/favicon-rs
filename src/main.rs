@@ -31,7 +31,8 @@ use std::env;
 use std::path::Path;
 use std::fs;
 use std::collections::LinkedList;
-use std::thread;
+
+use futures::executor::block_on;
 
 extern crate image;
 use image::DynamicImage;
@@ -54,7 +55,7 @@ async fn executor(img: &DynamicImage, width: u32, height: u32, pathname: String)
   icon.save(pathname).unwrap();
 }
 
-fn generator(src: &String, target: String) {
+async fn generator_caller(src: &String, target: String) {
   if src.trim().is_empty() {
     eprintln!("Not found image");
     help();
@@ -92,14 +93,16 @@ fn generator(src: &String, target: String) {
     pathname: "apple-touch-icon.png".to_string(),
   });
 
+  let img = image::open(src).unwrap();
   for opt in arr.iter() {
     let pathname = target.clone() + &opt.pathname;
-    thread::spawn(move || {
-      let img = image::open(src).unwrap();
-      executor(&img, opt.width, opt.height, pathname);
-    });
+    executor(&img.clone(), opt.width, opt.height, pathname).await;
   }
 
+}
+
+fn generator(src: &String, target: String) {
+  block_on(generator_caller(src, target))
 }
 
 fn main() {
