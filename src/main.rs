@@ -55,14 +55,21 @@ async fn executor(img: &DynamicImage, width: u32, height: u32, pathname: String)
   icon.save(pathname).unwrap();
 }
 
-async fn generator_caller(src: &String, target: String) {
+async fn generator_caller(src: &String, mut target: String) {
   if src.trim().is_empty() {
     eprintln!("Not found image");
     help();
   }
 
-  if !Path::new(&target).exists() {
-    fs::create_dir_all(&target).unwrap();
+  let path = Path::new(&target);
+  if !path.exists() {
+    fs::create_dir_all(path).unwrap();
+  }
+
+  if !target.ends_with("\\") {
+    target = target + "\\";
+  } else if !target.ends_with("/") {
+    target = target + "/";
   }
 
   let mut arr: LinkedList<ImgOpt> = LinkedList::new();
@@ -110,6 +117,7 @@ fn main() {
 
   match args.len() {
     1 => {
+      help();
     },
     2 => {
       let cmd = &args[1];
@@ -145,7 +153,6 @@ fn main() {
 
     },
     _ => {
-      // show a help message
       help();
     }
   }
