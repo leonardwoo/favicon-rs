@@ -1,7 +1,8 @@
 = Favicon
 
-== 0.2.0 2022
+== 0.2.0 2022-05-09
 . Change image generator with async
+. Fixed bug
 
 == 0.1.0 2022-05-02
 . Generator favicon images
