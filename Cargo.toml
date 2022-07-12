@@ -10,7 +10,7 @@ keywords = ["cli", "favicon"]
 categories = ["command-line-utilities"]
 homepage = "https://github.com/leonardwoo/favicon"
 build = "build.rs"
-publish = false
+publish = true
 
 [[bin]]
 name = "favicon"
