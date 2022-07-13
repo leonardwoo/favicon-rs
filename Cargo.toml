@@ -1,5 +1,5 @@
 [package]
-name = "favicon"
+name = "favicon-rs"
 version = "0.2.0"
 edition = "2021"
 authors = ["Leonard Woo <leo_916@yahoo.com>"]
@@ -8,7 +8,7 @@ description = "A CLI tool for convert favicon"
 readme = "README.adoc"
 keywords = ["cli", "favicon"]
 categories = ["command-line-utilities"]
-homepage = "https://github.com/leonardwoo/favicon"
+homepage = "https://github.com/leonardwoo/favicon-rs"
 build = "build.rs"
 publish = true
 
@@ -22,7 +22,7 @@ image = "*"
 futures = "0.3"
 
 [package.metadata.winres]
-FileDescription = "Favicon"
+FileDescription = "Favicon Rust"
 LegalCopyright = "Copyright © Leonard Woo"
 OriginalFilename = "favicon.exe"
 ProductName = "Favicon"
