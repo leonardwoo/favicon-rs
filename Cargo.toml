@@ -1,17 +1,34 @@
 [package]
-name = "favicon"
+name = "favicon-rs"
 version = "0.2.0"
 edition = "2021"
 authors = ["Leonard Woo <leo_916@yahoo.com>"]
-license = "BSD 3-Clause License"
-description = "A CLI tool for convert favicon"
+license = "BSD-3-Clause"
+description = "A favicon generation tool"
 readme = "README.adoc"
 keywords = ["cli", "favicon"]
 categories = ["command-line-utilities"]
-homepage = "https://github.com/leonardwoo/favicon"
+homepage = "https://github.com/leonardwoo/favicon-rs"
+build = "build.rs"
+publish = true
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[[bin]]
+name = "favicon"
+path = "src/main.rs"
+bench = false
 
 [dependencies]
-image = "*"
+image = "0.24.2"
 futures = "0.3"
+
+[package.metadata.winres]
+FileDescription = "Favicon Rust"
+LegalCopyright = "Copyright © Leonard Woo"
+OriginalFilename = "favicon.exe"
+ProductName = "Favicon"
+
+[target.'cfg(windows)'.build-dependencies]
+winres = "0.1"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+winapi = { version = "0.3", features = ["winuser"] }
