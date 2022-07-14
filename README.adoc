@@ -2,10 +2,11 @@
 
 :lsi: https://img.shields.io/github/license/leonardwoo/favicon-rs?style=flat-square
 // License Shield Image
-image:{lsi}["GitHub"]
-
 :dsi: https://img.shields.io/crates/d/favicon-rs?style=flat-square
-image:{dsi}[Crates.io]
+// Download Shield Image
+
+image:{lsi}["GitHub"]
+image:{dsi}["Crates.io"]
 
 == Introduction
 
@@ -23,4 +24,17 @@ cargo install favicon-rs
 [source,shell]
 ----
 favicon -i <image.png> [output_path]
+----
+
+== HTML Favicon
+
+[source,html]
+----
+<head>
+<link rel="icon" type="image/x-icon" href="/favicon.ico" /> <!-- Required -->
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+</head>
 ----
