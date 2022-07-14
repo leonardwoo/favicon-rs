@@ -27,20 +27,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-use std::env;
-use std::path::Path;
-use std::fs;
+extern crate image;
+
 use std::collections::LinkedList;
+use std::env;
+use std::fs;
+use std::path::Path;
 
 use futures::executor::block_on;
-
-extern crate image;
 use image::DynamicImage;
 use image::imageops::{FilterType, resize};
 
 fn help() {
   println!("usage:
-favicon -i <image.png> [output_path]
+favicon -i <image.png> [output_pathname]
+   -i <image.png>      input images with png
+   [output_pathname]   output pathname
 ");
 }
 
@@ -66,10 +68,14 @@ async fn generator_caller(src: &String, mut target: String) {
     fs::create_dir_all(path).unwrap();
   }
 
-  if !target.ends_with("\\") {
-    target = target + "\\";
-  } else if !target.ends_with("/") {
-    target = target + "/";
+  if cfg!(target_os = "windows") {
+    if !target.ends_with("\\") {
+      target = target + "\\";
+    }
+  } else {
+    if !target.ends_with("/") {
+      target = target + "/";
+    }
   }
 
   let mut arr: LinkedList<ImgOpt> = LinkedList::new();
@@ -105,11 +111,11 @@ async fn generator_caller(src: &String, mut target: String) {
     let pathname = target.clone() + &opt.pathname;
     executor(&img.clone(), opt.width, opt.height, pathname).await;
   }
-
 }
 
 fn generator(src: &String, target: String) {
-  block_on(generator_caller(src, target))
+  block_on(generator_caller(src, target));
+  println!("Done");
 }
 
 fn main() {
@@ -118,7 +124,7 @@ fn main() {
   match args.len() {
     1 => {
       help();
-    },
+    }
     2 => {
       let cmd = &args[1];
       match &cmd[..] {
@@ -126,9 +132,9 @@ fn main() {
         _ => {
           eprintln!("error: invalid command");
           help();
-        },
+        }
       }
-    },
+    }
     3 => {
       let cmd = &args[1];
       match &cmd[..] {
@@ -136,10 +142,9 @@ fn main() {
         _ => {
           eprintln!("error: invalid command");
           help();
-        },
+        }
       }
-
-    },
+    }
     4 => {
       let cmd = &args[1];
 
@@ -148,14 +153,12 @@ fn main() {
         _ => {
           eprintln!("error: invalid command");
           help();
-        },
+        }
       }
-
-    },
+    }
     _ => {
       help();
     }
   }
-
 }
 
