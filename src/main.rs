@@ -38,12 +38,24 @@ use futures::executor::block_on;
 use image::DynamicImage;
 use image::imageops::{FilterType, resize};
 
+/// --help
 fn help() {
-  println!("usage:
-favicon -i <image.png> [output_pathname]
+  println!("Usage: favicon -i <image.png> [output_pathname]
    -i <image.png>      input images with png
    [output_pathname]   output pathname
+   -h                  display help for command
+   -v                  output the version information
 ");
+}
+
+fn ehelp() {
+  eprintln!("error: invalid command");
+  help();
+}
+
+fn version() {
+  let version = env!("CARGO_PKG_VERSION");
+  println!("favicon {}", version);
 }
 
 struct ImgOpt {
@@ -52,6 +64,7 @@ struct ImgOpt {
   pathname: String,
 }
 
+/// image resize async executor
 async fn executor(img: &DynamicImage, width: u32, height: u32, pathname: String) {
   let icon = resize(img, width, height, FilterType::Gaussian);
   icon.save(pathname).unwrap();
@@ -80,6 +93,7 @@ async fn generator_caller(src: &String, mut target: String) {
 
   let mut arr: LinkedList<ImgOpt> = LinkedList::new();
 
+  // image size and name list start
   arr.push_back(ImgOpt {
     width: 48,
     height: 48,
@@ -105,6 +119,7 @@ async fn generator_caller(src: &String, mut target: String) {
     height: 180,
     pathname: "apple-touch-icon.png".to_string(),
   });
+  // image size and name list end
 
   let img = image::open(src).unwrap();
   for opt in arr.iter() {
@@ -115,12 +130,12 @@ async fn generator_caller(src: &String, mut target: String) {
 
 fn generator(src: &String, target: String) {
   block_on(generator_caller(src, target));
-  println!("Done");
+  println!("Convert Completed");
 }
 
 fn main() {
   let args: Vec<String> = env::args().collect();
-
+  // println!("{:?}", args);
   match args.len() {
     1 => {
       help();
@@ -129,9 +144,9 @@ fn main() {
       let cmd = &args[1];
       match &cmd[..] {
         "-h" => help(),
+        "-v" => version(),
         _ => {
-          eprintln!("error: invalid command");
-          help();
+          ehelp();
         }
       }
     }
@@ -140,19 +155,16 @@ fn main() {
       match &cmd[..] {
         "-i" => generator(&args[2], "./".to_string()),
         _ => {
-          eprintln!("error: invalid command");
-          help();
+          ehelp();
         }
       }
     }
     4 => {
       let cmd = &args[1];
-
       match &cmd[..] {
         "-i" => generator(&args[2], String::from(&args[3])),
         _ => {
-          eprintln!("error: invalid command");
-          help();
+          ehelp();
         }
       }
     }
