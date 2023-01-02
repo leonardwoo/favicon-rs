@@ -37,6 +37,7 @@ use std::path::Path;
 use futures::executor::block_on;
 use image::DynamicImage;
 use image::imageops::{FilterType, resize};
+use image::ImageFormat;
 
 // --help
 fn help() {
@@ -63,12 +64,13 @@ struct ImgOpt {
   width: u32,
   height: u32,
   pathname: String,
+  format: ImageFormat,
 }
 
 /// image resize async executor
-async fn executor(img: &DynamicImage, width: u32, height: u32, pathname: String) {
+async fn executor(img: &DynamicImage, width: u32, height: u32, pathname: String, format: ImageFormat) {
   let icon = resize(img, width, height, FilterType::Gaussian);
-  icon.save(pathname).unwrap();
+  icon.save_with_format(pathname, format).unwrap();
 }
 
 async fn generator_caller(src: &String, mut target: String) {
@@ -99,33 +101,38 @@ async fn generator_caller(src: &String, mut target: String) {
     width: 48,
     height: 48,
     pathname: "favicon.ico".to_string(),
+    format: ImageFormat::Ico,
   });
   arr.push_back(ImgOpt {
     width: 32,
     height: 32,
     pathname: "favicon-32x32.png".to_string(),
+    format: ImageFormat::Png,
   });
   arr.push_back(ImgOpt {
     width: 192,
     height: 192,
     pathname: "android-chrome-192x192.png".to_string(),
+    format: ImageFormat::Png,
   });
   arr.push_back(ImgOpt {
     width: 512,
     height: 512,
     pathname: "android-chrome-512x512.png".to_string(),
+    format: ImageFormat::Png,
   });
   arr.push_back(ImgOpt {
     width: 180,
     height: 180,
     pathname: "apple-touch-icon.png".to_string(),
+    format: ImageFormat::Png,
   });
   // image size and name list end
 
   let img = image::open(src).unwrap();
   for opt in arr.iter() {
     let pathname = target.clone() + &opt.pathname;
-    executor(&img.clone(), opt.width, opt.height, pathname).await;
+    executor(&img.clone(), opt.width, opt.height, pathname, opt.format).await;
   }
 }
 

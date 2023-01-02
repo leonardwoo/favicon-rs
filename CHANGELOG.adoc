@@ -1,8 +1,9 @@
 = Favicon
 
-== 0.4.0 2022-
+== 0.4.0 2023-
 . Add `-v` for display version
 . Update `-h`
+. Update image 0.24.5
 
 == 0.3.0 2022-07-14
 . Update doc
