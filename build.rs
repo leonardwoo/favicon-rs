@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Leonard Woo
+ * Copyright (c) 2023 Leonard Woo
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,14 +30,17 @@
 #[cfg(windows)]
 extern crate winres;
 
+// https://docs.rs/winres/0.1.0/winres/struct.WindowsResource.html
+
+#[cfg(windows)]
 fn main() {
-    #[cfg(windows)]
-    {
-        // https://docs.rs/winres/0.1.0/winres/struct.WindowsResource.html
-        let mut res = winres::WindowsResource::new();
-        // res.set_icon("resources/favicon.ico");
-        res.set_language(0x0409);
-        res.set_manifest_file("resources/favicon.exe.manifest");
-        res.compile().unwrap();
-    }
+    let mut res = winres::WindowsResource::new();
+    // res.set_icon("resources/favicon.ico");
+    res.set_language(0x0409);
+    res.set_manifest_file("resources/manifest.xml");
+    res.compile().unwrap();
+}
+
+#[cfg(unix)]
+fn main() {
 }

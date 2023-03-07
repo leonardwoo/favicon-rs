@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Leonard Woo
+ * Copyright (c) 2023 Leonard Woo
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -57,7 +57,7 @@ fn ehelp() {
 // --version
 fn version() {
   let version = env!("CARGO_PKG_VERSION");
-  println!("favicon {}", version);
+  println!("v{}", version);
 }
 
 struct ImgOpt {
