@@ -1,33 +1,27 @@
-= Favicon-rs
+# Favicon-rs
 
-:lsi: https://img.shields.io/github/license/leonardwoo/favicon-rs?style=flat-square
-:dsi: https://img.shields.io/crates/d/favicon-rs?style=flat-square
+[!["License"](https://img.shields.io/github/license/leonardwoo/favicon-rs?style=flat-square)](https://github.com/leonardwoo/favicon-rs/blob/main/LICENSE)
+[!["Crates.io"](https://img.shields.io/crates/d/favicon-rs?style=flat-square)](https://srl.cx/jIUoJvBB)
 
-image:{lsi}["License"]
-image:{dsi}["Crates.io"]
-
-== Introduction
+## Introduction
 
 A favicon generation tool
 
-== Install
+## Install
 
-[source,shell]
-----
+```shell
 cargo install favicon-rs
-----
+```
 
-== Usage
+## Usage
 
-[source,shell]
-----
+```shell
 favicon -i <image.png> [output_path]
-----
+```
 
-== HTML Favicon
+## HTML Favicon
 
-[source,html]
-----
+```html
 <head>
 
 <link rel="icon" type="image/x-icon" href="/favicon.ico" /> <!-- Required -->
@@ -37,4 +31,4 @@ favicon -i <image.png> [output_path]
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
 
 </head>
-----
+```
