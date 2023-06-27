@@ -1,11 +1,12 @@
-# Favicon-rs
+# Favicon
 
 [!["License"](https://img.shields.io/github/license/leonardwoo/favicon-rs?style=flat-square)](https://github.com/leonardwoo/favicon-rs/blob/main/LICENSE)
 [!["Crates.io"](https://img.shields.io/crates/d/favicon-rs?style=flat-square)](https://srl.cx/jIUoJvBB)
+[!["Crates.io"](https://img.shields.io/crates/v/favicon-rs?style=flat-square)](https://srl.cx/jIUoJvBB)
 
 ## Introduction
 
-A favicon generation tool
+A favicon image generation tool
 
 ## Install
 
