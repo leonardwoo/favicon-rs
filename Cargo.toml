@@ -1,11 +1,11 @@
 [package]
 name = "favicon-rs"
-version = "0.4.0"
+version = "0.5.0"
 edition = "2021"
 authors = ["Leonard Woo <leo_916@yahoo.com>"]
 license = "BSD-3-Clause"
 description = "A favicon generation tool"
-readme = "README.adoc"
+readme = "README.md"
 keywords = ["cli", "favicon"]
 categories = ["command-line-utilities"]
 homepage = "https://github.com/leonardwoo/favicon-rs"
@@ -18,8 +18,8 @@ path = "src/main.rs"
 bench = false
 
 [dependencies]
-image = "0.24.5"
-futures = "0.3"
+image = "0.24.7"
+futures = "0.3.30"
 
 [package.metadata.winres]
 FileDescription = "Favicon toolkit with Rust"
