@@ -6,7 +6,7 @@
 
 ## Introduction
 
-A favicon image generation tool
+A favicon image generation tool.
 
 ## Install
 
@@ -25,7 +25,10 @@ favicon -i <image.png> [output_path]
 ```html
 <head>
 
-<link rel="icon" type="image/x-icon" href="/favicon.ico" /> <!-- Required -->
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<!-- OR -->
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
 <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png" />
 <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png" />
